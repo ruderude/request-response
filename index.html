@@ -80,6 +80,10 @@
                 <button id="ajax_post_btn" type="submit" class="btn btn-primary">送信</button>
             </div>
         </div>
+
+        <br>
+
+        <h3>axiosによる通信....</h3>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -87,47 +91,64 @@
     <script>
 
         // XMLHttpRequest GET通信
-        const xmlGetBtn = document.getElementById('xml_get_btn');
-        xmlGetBtn.addEventListener("click", () => {
+        const xmlGetBtn = document.getElementById('xml_get_btn'); // GET通信用のボタンを取得
+        xmlGetBtn.addEventListener("click", () => { // ボタンにクリックイベントを付与
+            // フォームの値を所得
             const xmlGet = document.getElementById('xml_get').value;
+            // URLの末尾にパラメータを付与する
             const url = "backend/get.php/?get_test=" + xmlGet;
+            // XMLHttpRequestクラスをインスタンス化
             const xml = new XMLHttpRequest();
+            // XMLHttpRequestインスタンスに通信内容をセット
             xml.open("GET", url, true);
+            // 通信後に行いたい処理をセット
             xml.onreadystatechange = function() {
                 if(this.readyState == 4 && this.status == 200){
                     console.log(this.responseText);
                 }
             }
+            // sendメソッドを実行して通信を行う
             xml.send();
         }, false);
 
         // XMLHttpRequest POST通信
-        const xmlPostBtn = document.getElementById('xml_post_btn');
-        xmlPostBtn.addEventListener("click", () => {
+        const xmlPostBtn = document.getElementById('xml_post_btn'); // POST通信用のボタンを取得
+        xmlPostBtn.addEventListener("click", () => { // ボタンにクリックイベントを付与
+            // フォームの値を所得
             const xmlPost = document.getElementById('xml_post').value;
+            // URLを設定
             const url = "backend/post.php/";
+            // パラメータを設定
             const params = "post_test=" + xmlPost
+            // XMLHttpRequestクラスをインスタンス化
             const xml = new XMLHttpRequest();
+            // XMLHttpRequestインスタンスに通信内容をセット
             xml.open("POST", url, true);
+            // リクエストヘッダーを設定
             xml.setRequestHeader('Content-type', 'application/x-www-form-urlencoded'); 
+            // 通信後に行いたい処理をセット
             xml.onreadystatechange = function() {
                 if(this.readyState == 4 && this.status == 200){
                     console.log(this.responseText);
                 }
             }
+            // sendメソッドを実行して通信を行う
             xml.send(params);
         }, false);
 
         // Ajax GET通信 jQueryの書き方
-        const ajaxGETBtn = $('#ajax_get_btn');
-        ajaxGETBtn.on('click', function() {
+        const ajaxGETBtn = $('#ajax_get_btn'); // GET通信用のボタンを取得
+        ajaxGETBtn.on('click', function() { // ボタンにクリックイベントを付与
+            // フォームの値を所得
             const data = $('#ajax_get').val();
+            // パラメータを設定
             const params = {
                 "get_test": data,
             }
+            // Ajax通信開始
             $.ajax({
                 url: 'backend/get.php', //アクセスするURLかディレクトリ
-                type: 'get',
+                type: 'get', // httpメソッドを設定
                 cache: false, //cacheを使うかどうか
                 dataType: 'json', //data type scriptなどデータタイプの指定
                 data: params, //アクセスするときに必要なデータを 記載
@@ -146,15 +167,18 @@
         });
 
         // Ajax POST通信 jQueryの書き方
-        const ajaxPostBtn = $('#ajax_post_btn');
-        ajaxPostBtn.on('click', function() {
+        const ajaxPostBtn = $('#ajax_post_btn'); // POST通信用のボタンを取得
+        ajaxPostBtn.on('click', function() { // ボタンにクリックイベントを付与
+            // フォームの値を所得
             const data = $('#ajax_post').val();
+            // パラメータを設定
             const params = {
                 "post_test": data,
             }
+            // Ajax通信開始
             $.ajax({
                 url: 'backend/post.php', //アクセスするURLかディレクトリ
-                type: 'post',
+                type: 'post', // httpメソッドを設定
                 cache: false, //cacheを使うかどうか
                 dataType: 'json', //data type scriptなどデータタイプの指定
                 data: params, //アクセスするときに必要なデータを 記載
