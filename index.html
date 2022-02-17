@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTTPテスト</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+
+    </style>
 </head>
 <body>
 
@@ -44,7 +47,7 @@
                 <input id="xml_get" type="text" name="get_test" class="form-control" >
             </div>
             <div class="col-4">
-                <button id="xml_get_btn" type="submit" class="btn btn-primary">送信</button>
+                <button id="xml_get_btn" type="submit" class="btn btn-info">送信</button>
             </div>
         </div>
 
@@ -54,7 +57,7 @@
                 <input id="xml_post" type="text" name="post_test" class="form-control" >
             </div>
             <div class="col-4">
-                <button id="xml_post_btn" type="submit" class="btn btn-primary">送信</button>
+                <button id="xml_post_btn" type="submit" class="btn btn-info">送信</button>
             </div>
         </div>
 
@@ -67,7 +70,7 @@
                 <input id="ajax_get" type="text" name="get_test" class="form-control" >
             </div>
             <div class="col-4">
-                <button id="ajax_get_btn" type="submit" class="btn btn-primary">送信</button>
+                <button id="ajax_get_btn" type="submit" class="btn btn-warning">送信</button>
             </div>
         </div>
 
@@ -77,17 +80,44 @@
                 <input id="ajax_post" type="text" name="post_test" class="form-control" >
             </div>
             <div class="col-4">
-                <button id="ajax_post_btn" type="submit" class="btn btn-primary">送信</button>
+                <button id="ajax_post_btn" type="submit" class="btn btn-warning">送信</button>
             </div>
         </div>
 
         <br>
 
-        <h3>axiosによる通信....</h3>
+        <h3>axiosによる通信</h3>
+        <h4>GET通信</h4>
+        <div class="row">
+            <div class="col-8">
+                <input id="axios_get" type="text" name="get_test" class="form-control" >
+            </div>
+            <div class="col-4">
+                <button id="axios_get_btn" type="submit" class="btn btn-success">送信</button>
+            </div>
+        </div>
+
+        <h4>POST通信</h4>
+        <div class="row">
+            <div class="col-8">
+                <input id="axios_post" type="text" name="post_test" class="form-control" >
+            </div>
+            <div class="col-4">
+                <button id="axios_post_btn" type="submit" class="btn btn-success">送信</button>
+            </div>
+        </div>
+
+        <br>
+
+        <div id="test" class="alert alert-primary" role="alert"></div>
+
+        <br>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
 
         // XMLHttpRequest GET通信
@@ -162,7 +192,7 @@
                 console.log(error);
             })
             .always(function(xhr, msg) { //通信結果にかかわらず実行する処理を書く
-                console.log('終わり');
+                // console.log('終わり');
             });
         });
 
@@ -192,9 +222,50 @@
                 console.log(error);
             })
             .always(function(xhr, msg) { //通信結果にかかわらず実行する処理を書く
-                console.log('終わり');
+                // console.log('終わり');
             });
         });
+
+        // axiosのGET通信
+        const axiosGetBtn = document.getElementById('axios_get_btn');
+        axiosGetBtn.addEventListener("click", () => { // ボタンにクリックイベントを付与
+
+            const axiosGet = document.getElementById('axios_get').value;
+            axios.get('backend/get.php?get_test=' + axiosGet)
+
+            // thenで成功した場合、catchで失敗した場合の処理をかける
+            .then(response => {
+                console.log(response.data); 
+            }).catch(err => {
+                console.log('通信失敗');
+            });
+
+        }, false);
+
+        // axiosのPOST通信
+        const axiosPostBtn = document.getElementById('axios_post_btn');
+        axiosPostBtn.addEventListener("click", () => { // ボタンにクリックイベントを付与
+
+            const axiosPost = document.getElementById('axios_post').value;
+
+            // POSTデータは、axios.postの第2引数で渡す
+            const data = new URLSearchParams();
+            data.append('post_test', axiosPost);
+
+            axios.post('backend/post.php', data)
+
+            // thenで成功した場合、catchで失敗した場合の処理をかける
+            .then(response => {
+                console.log(response.data.text); 
+                const test = document.getElementById('test');
+                test.innerText = response.data.text;
+            }).catch(err => {
+                console.log('通信失敗');
+            });
+
+        }, false);
+
+        
 
     </script>
 </body>
